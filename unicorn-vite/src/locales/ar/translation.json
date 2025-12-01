@@ -1,0 +1,84 @@
+{
+  "header": {
+    "title": "احصل على {{appName}} NFT الخاص بك",
+    "description": "انقر على \"احصل\" أدناه للحصول على {{appName}} NFT الخاص بك.",
+    "accessNote": "لأعضاء {{platformName}} الحاليين فقط",
+    "claimFree": "احصل مجاناً"
+  },
+  "connection": {
+    "lookingForWallet": "جارٍ البحث عن محفظة موجودة...",
+    "connectingToWallet": "جارٍ الاتصال بمحفظتك",
+    "onlyExistingWallets": "فقط المحافظ الذكية الموجودة من {{platformName}} يمكنها الوصول إلى هذه السحب",
+    "factoryInfo": "المصنع: {{factory}} | العميل: {{client}}"
+  },
+  "access": {
+    "required": "مطلوب الوصول",
+    "onlyThroughPortal": "هذه الخدمة متاحة فقط من خلال البوابة الرسمية:",
+    "mustAccessFromDashboard": "يجب عليك الوصول إلى هذه الصفحة من لوحة تحكم حساب {{platformName}} للمشاركة.",
+    "howToAccess": "كيفية الوصول:",
+    "step1": "سجل الدخول إلى حساب {{platformName}} الخاص بك",
+    "step2": "انتقل إلى قسم {{appName}}",
+    "step3": "انقر على رابط الحصول الرسمي"
+  },
+  "claim": {
+    "checkingStatus": "جارٍ التحقق من حالة الحصول...",
+    "button": "احصل على NFT",
+    "claiming": "جارٍ الحصول...",
+    "claimingYourPrize": "جارٍ الحصول على {{appName}} الخاص بك...",
+    "success": "تم الحصول بنجاح!",
+    "alreadyClaimed": "لقد حصلت بالفعل على {{appName}} الخاص بك!",
+    "waitBeforeRetry": "يرجى الانتظار قبل المحاولة مرة أخرى",
+    "accessDenied": "تم رفض الوصول - محفظة غير مصرح بها",
+    "ensureConnected": "يرجى التأكد من اتصال محفظتك",
+    "transactionFailed": "فشلت المعاملة. يرجى المحاولة مرة أخرى."
+  },
+  "errors": {
+    "noWallet": "لم يتم العثور على محفظة موجودة",
+    "lotteryOnlyForMembers": "هذا السحب متاح فقط للمستخدمين الذين لديهم حساب {{platformName}} صالح.",
+    "mustHaveSmartWallet": "يجب أن تكون قد حصلت على محفظة ذكية من نظامنا للمشاركة."
+  },
+  "status": {
+    "paused": "الحصول متوقف مؤقتاً",
+    "pausedDescription": "تم إيقاف الحصول مؤقتاً بواسطة مالك العقد.",
+    "ended": "انتهت فترة الحصول",
+    "endedDescription": "لم يعد الحصول على {{appName}} متاحاً.",
+    "drawingDate": "تاريخ السحب: {{date}}",
+    "maxSupplyReached": "تم الوصول إلى الحد الأقصى للإمداد",
+    "allClaimed": "تم الحصول على جميع الجوائز البالغ عددها {{count}}!"
+  },
+  "drawing": {
+    "title": "تفاصيل سحب {{prizeAmount}} ({{drawingName}})",
+    "drawingDate": "تاريخ السحب:",
+    "status": "الحالة:",
+    "active": "الحصول نشط",
+    "ended": "انتهى الحصول",
+    "timeRemaining": "الوقت المتبقي:",
+    "loading": "جارٍ التحميل...",
+    "hasEnded": "انتهى السحب"
+  },
+  "social": {
+    "sharePrompt": "شارك حصولك:",
+    "shareMessage": "حصلت على مقتنيات {{appName}} مجاناً في {{url}}"
+  },
+  "connectionStatus": {
+    "connected": "متصل",
+    "connecting": "جارٍ الاتصال...",
+    "autoConnectInProgress": "الاتصال التلقائي قيد التقدم"
+  },
+  "theme": {
+    "toggleLight": "التبديل إلى الوضع الفاتح",
+    "toggleDark": "التبديل إلى الوضع الداكن"
+  },
+  "language": {
+    "select": "اختر اللغة",
+    "en": "الإنجليزية",
+    "es": "الإسبانية",
+    "zh": "الصينية",
+    "ja": "اليابانية",
+    "he": "العبرية",
+    "ar": "العربية"
+  },
+  "footer": {
+    "poweredBy": "مدعوم من"
+  }
+}

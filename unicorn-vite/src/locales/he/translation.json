@@ -1,0 +1,84 @@
+{
+  "header": {
+    "title": "קבל את ה-{{appName}} NFT שלך",
+    "description": "לחץ על \"קבל\" למטה כדי לקבל את ה-{{appName}} NFT שלך.",
+    "accessNote": "לחברי {{platformName}} קיימים בלבד",
+    "claimFree": "קבל בחינם"
+  },
+  "connection": {
+    "lookingForWallet": "מחפש ארנק קיים...",
+    "connectingToWallet": "מתחבר לארנק שלך",
+    "onlyExistingWallets": "רק ארנקים חכמים קיימים מ-{{platformName}} יכולים לגשת להגרלה זו",
+    "factoryInfo": "מפעל: {{factory}} | לקוח: {{client}}"
+  },
+  "access": {
+    "required": "נדרשת גישה",
+    "onlyThroughPortal": "שירות זה נגיש רק דרך הפורטל הרשמי:",
+    "mustAccessFromDashboard": "עליך לגשת לדף זה מלוח הבקרה של חשבון {{platformName}} שלך כדי להשתתף.",
+    "howToAccess": "כיצד לגשת:",
+    "step1": "התחבר לחשבון {{platformName}} שלך",
+    "step2": "נווט לקטע {{appName}}",
+    "step3": "לחץ על קישור הקבלה הרשמי"
+  },
+  "claim": {
+    "checkingStatus": "בודק סטטוס קבלה...",
+    "button": "קבל NFT",
+    "claiming": "מקבל...",
+    "claimingYourPrize": "מקבל את ה-{{appName}} שלך...",
+    "success": "התקבל בהצלחה!",
+    "alreadyClaimed": "כבר קיבלת את ה-{{appName}} שלך!",
+    "waitBeforeRetry": "אנא המתן לפני שתנסה שוב",
+    "accessDenied": "הגישה נדחתה - ארנק לא מורשה",
+    "ensureConnected": "אנא ודא שהארנק שלך מחובר",
+    "transactionFailed": "העסקה נכשלה. אנא נסה שוב."
+  },
+  "errors": {
+    "noWallet": "לא נמצא ארנק קיים",
+    "lotteryOnlyForMembers": "הגרלה זו זמינה רק למשתמשים עם חשבון {{platformName}} תקף.",
+    "mustHaveSmartWallet": "עליך לקבל ארנק חכם מהמערכת שלנו כדי להשתתף."
+  },
+  "status": {
+    "paused": "הקבלה מושהית",
+    "pausedDescription": "הקבלה הושהתה זמנית על ידי בעל החוזה.",
+    "ended": "תקופת הקבלה הסתיימה",
+    "endedDescription": "קבלת {{appName}} אינה זמינה יותר.",
+    "drawingDate": "תאריך הגרלה: {{date}}",
+    "maxSupplyReached": "הגיע למקסימום האספקה",
+    "allClaimed": "כל {{count}} הפרסים נתבעו!"
+  },
+  "drawing": {
+    "title": "פרטי הגרלת {{prizeAmount}} ({{drawingName}})",
+    "drawingDate": "תאריך הגרלה:",
+    "status": "סטטוס:",
+    "active": "קבלה פעילה",
+    "ended": "הקבלה הסתיימה",
+    "timeRemaining": "זמן שנותר:",
+    "loading": "טוען...",
+    "hasEnded": "ההגרלה הסתיימה"
+  },
+  "social": {
+    "sharePrompt": "שתף את הקבלה שלך:",
+    "shareMessage": "קיבלתי את האספנות {{appName}} בחינם ב-{{url}}"
+  },
+  "connectionStatus": {
+    "connected": "מחובר",
+    "connecting": "מתחבר...",
+    "autoConnectInProgress": "חיבור אוטומטי בתהליך"
+  },
+  "theme": {
+    "toggleLight": "עבור למצב בהיר",
+    "toggleDark": "עבור למצב כהה"
+  },
+  "language": {
+    "select": "בחר שפה",
+    "en": "אנגלית",
+    "es": "ספרדית",
+    "zh": "סינית",
+    "ja": "יפנית",
+    "he": "עברית",
+    "ar": "ערבית"
+  },
+  "footer": {
+    "poweredBy": "מופעל על ידי"
+  }
+}

@@ -1,247 +1,297 @@
-# PolyPrize Claiming DApp
+# NFT Claiming DApp
 
-A React application for claiming exclusive soul-bound NFTs , built for polygon.ac community members with existing smart wallets.
+A white-label React application for claiming exclusive NFTs, built with multi-language support, customizable theming, and easy Vercel deployment.
 
 ## Overview
 
-This decentralized application (dapp) allows authorized users to claim PolyPrize NFTs on the Polygon blockchain. The NFTs are soul-bound (non-transferable) and serve as both collectibles and raffle entries for a $200 prize drawing.
+This decentralized application (dapp) allows authorized users to claim NFTs on the Polygon blockchain. It's designed to be easily customizable and deployable as your own branded NFT claiming experience.
 
 ### Key Features
 
+- **White-Label Ready**: Fully customizable branding, colors, and messaging
+- **Multi-Language Support**: Built-in i18n with English, Spanish, Chinese, Japanese, Hebrew, and Arabic
+- **Dark/Light Mode**: Automatic theme switching with system preference detection
+- **RTL Support**: Full right-to-left layout support for Hebrew and Arabic
 - **Gasless Claiming**: Users pay no transaction fees thanks to account abstraction
-- **Soul-Bound NFTs**: Tokens cannot be transferred, ensuring fair lottery participation
-- **Smart Wallet Integration**: Works exclusively with pre-issued Thirdweb smart accounts
+- **NFT Preview**: Automatically fetches and displays NFT image from contract metadata
+- **Smart Wallet Integration**: Works with Thirdweb smart accounts
 - **Social Sharing**: Built-in sharing to LinkedIn, Twitter, Farcaster, and Bluesky
 - **Real-Time Data**: Live contract data showing supply, drawing date, and countdown
-- **Mobile Responsive**: Clean white design with purple branding
+- **Mobile Responsive**: Clean, modern design that works on all devices
 
 ## Technology Stack
 
 - **Frontend**: React 19 with Vite
 - **Web3**: Thirdweb v5 SDK
-- **Blockchain**: Polygon mainnet
-- **Styling**: Tailwind CSS
-- **Analytics**: Google Analytics 4
+- **Blockchain**: Polygon mainnet (configurable)
+- **Styling**: Tailwind CSS with CSS custom properties
+- **Internationalization**: i18next with browser language detection
+- **Analytics**: Google Analytics 4 (optional)
 - **Deployment**: Vercel
 
-## Smart Contract Details
+## Quick Start
 
-- **Contract Address**: 
-- **Network**: 
-- **Type**: ERC721 with soul-bound restrictions
-- **Max Supply**: 
-- **Factory Address**: `0xD771615c873ba5a2149D5312448cE01D677Ee48A`
-
-## Prerequisites
-
-### For Users
-- Must have a pre-existing smart wallet issued by polygon.ac/unicorn.eth
-- Wallet must be created from the authorized factory address
-- Access through authorized dapp domains only
-
-### For Developers
-- Node.js 18+
-- npm or yarn
-- Environment variables (see below)
-
-## Installation
+### 1. Clone and Install
 
 ```bash
-# Clone the repository
 git clone [repository-url]
 cd unicorn-vite
-
-# Install dependencies
 npm install --legacy-peer-deps
-
-# Set up environment variables
-cp .env.example .env
 ```
 
-## Environment Variables
-
-Create a `.env` file in the `unicorn-vite` directory:
-
-```env
-# Thirdweb Configuration
-VITE_THIRDWEB_CLIENT_ID=your_client_id_here
-VITE_THIRDWEB_FACTORY_ADDRESS=0xD771615c873ba5a2149D5312448cE01D677Ee48A
-
-# Smart Contract
-VITE_CONTRACT_ADDRESS=YOUR_CONTRACT_ADDRESS
-
-# Analytics (Optional)
-VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-```
-
-## Development
+### 2. Configure Environment
 
 ```bash
-# Start development server
+cp .env.example .env.local
+```
+
+Edit `.env.local` with your configuration (see [Environment Variables](#environment-variables) below).
+
+### 3. Run Development Server
+
+```bash
 npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
 ```
 
 The app will be available at `http://localhost:5173`
 
-## Architecture
+### 4. Deploy to Vercel
 
-### Authorization System
-The app implements a strict authorization system:
-
-1. **AutoConnect Detection**: Automatically connects to existing smart wallets
-2. **Factory Validation**: Verifies wallets were created by the authorized factory
-3. **Session Management**: Maintains connection state through localStorage
-4. **Timeout Handling**: 15-second connection timeout with user feedback
-
-### Contract Integration
-All contract interactions use explicit function signatures required by Thirdweb v5:
-
-```javascript
-// Example contract call
-const { data: hasMinted } = useReadContract({
-  contract,
-  method: "function hasMinted(address) view returns (bool)",
-  params: [address]
-});
+```bash
+npm run build
 ```
 
-### State Management
-- React hooks for wallet and contract state
-- Real-time updates for supply and countdown
-- Error handling with user-friendly messages
-- Rate limiting (8-second cooldown between attempts)
+Then connect your repository to Vercel and set environment variables in the dashboard.
 
-## Key Components
+## Environment Variables
 
-### `App.jsx`
-Main application component with Thirdweb provider and AutoConnect setup.
+### Required
 
-### `MintingInterface`
-Core claiming interface with authorization logic and contract interactions.
+| Variable | Description |
+|----------|-------------|
+| `VITE_THIRDWEB_CLIENT_ID` | Your Thirdweb client ID ([get one here](https://thirdweb.com/dashboard)) |
+| `VITE_CONTRACT_ADDRESS` | Your deployed NFT contract address |
+| `VITE_THIRDWEB_FACTORY_ADDRESS` | Smart wallet factory address |
 
-### `SocialShareButton`
-Reusable component for social media sharing with platform-specific URLs.
+### Branding (Optional)
 
-### `analytics.js`
-Google Analytics integration tracking user interactions and contract events.
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VITE_APP_NAME` | `BitBasel Prize` | App name shown throughout UI |
+| `VITE_APP_EMOJI` | `🎨` | Emoji displayed with app name |
+| `VITE_PLATFORM_NAME` | `BitBasel` | Platform name for access messages |
+| `VITE_PLATFORM_URL` | `https://www.bitbasel.miami` | Platform URL |
+| `VITE_PRIZE_AMOUNT` | `$100` | Prize amount shown in UI |
+| `VITE_SHARE_URL` | `https://www.bitbasel.miami/artweek` | URL for social sharing |
 
-## Security Features
+### NFT Image (Optional)
 
-- **Factory Address Validation**: Only wallets from authorized factory can connect
-- **Rate Limiting**: Prevents spam claiming attempts
-- **Input Validation**: Address format validation
-- **Error Sanitization**: Generic error messages to prevent information leakage
-- **Contract Verification**: Bytecode validation (configurable)
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VITE_NFT_IMAGE_URL` | (auto from contract) | Override NFT preview image URL |
+| `VITE_NFT_IMAGE_ALT` | `NFT Preview` | Alt text for NFT image |
+| `VITE_NFT_IMAGE_IS_VIDEO` | `false` | Set to `true` for video files |
 
-## Analytics Tracking
+If `VITE_NFT_IMAGE_URL` is not set, the app automatically fetches the image from the contract's `tokenURI`.
 
-The app tracks these events:
-- Page views and user sessions
-- Wallet connection success/failure
-- Authorization checks
-- NFT claiming attempts
-- Social media shares
-- Drawing countdown views
+### Social Handles (Optional)
 
-## Deployment
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VITE_TWITTER_HANDLE` | `@BitBaselMiami` | Twitter handle(s) for share text |
+| `VITE_FARCASTER_HANDLE` | `@bitbasel` | Farcaster handle |
+| `VITE_BLUESKY_HANDLE` | `@bitbasel` | Bluesky handle |
 
-### Vercel Deployment
+### Feature Toggles (Optional)
 
-1. **Repository Setup**:
-   ```bash
-   git add .
-   git commit -m "Ready for deployment"
-   git push origin main
-   ```
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `VITE_RAFFLE_ENABLED` | `true` | Show/hide raffle countdown section |
+| `VITE_GA_MEASUREMENT_ID` | (none) | Google Analytics 4 Measurement ID |
 
-2. **Vercel Configuration**:
-   - Root Directory: `unicorn-vite`
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-   - Install Command: `npm install --legacy-peer-deps`
+## Customization
 
-3. **Environment Variables**:
-   Set all required environment variables in Vercel dashboard.
+### Theming
 
-### Alternative: Manual Configuration
+Edit `src/config/theme.config.js` to customize colors:
 
-Use `vercel.json` in project root:
-
-```json
-{
-  "framework": "vite",
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "installCommand": "npm install --legacy-peer-deps"
+```javascript
+colors: {
+  light: {
+    primary: '#0099FF',      // Main accent color
+    background: '#FFFFFF',   // Page background
+    surface: '#F5F5F5',      // Card backgrounds
+    text: '#181818',         // Primary text
+    // ... more colors
+  },
+  dark: {
+    primary: '#0099FF',
+    background: '#000000',
+    // ... dark mode colors
+  }
 }
 ```
 
-## Usage
+### Translations
 
-### For Authorized Users
+Translation files are located in `src/locales/`:
 
-1. **Access**: Visit the deployed dapp URL
-2. **AutoConnect**: App automatically detects and connects existing wallet
-3. **Claim**: Click "Claim NFT" button for gasless transaction
-4. **Share**: Use social buttons to share claim on social media
-5. **Wait**: NFT holders are automatically entered in raffle drawing
+```
+src/locales/
+├── en/translation.json   # English
+├── es/translation.json   # Spanish
+├── zh/translation.json   # Chinese
+├── ja/translation.json   # Japanese
+├── he/translation.json   # Hebrew
+└── ar/translation.json   # Arabic
+```
 
-### For Administrators
+#### Adding a New Language
 
-Monitor via:
-- Google Analytics dashboard for user behavior
-- Blockchain explorer for contract interactions
-- Vercel dashboard for deployment status
+1. Create a new folder: `src/locales/XX/translation.json`
+2. Copy an existing translation file and translate the values
+3. Add the import in `src/i18n.js`:
 
-## Smart Contract Functions
+```javascript
+import xx from './locales/xx/translation.json';
 
-### User Functions
-- `mint()`: Claim one NFT per wallet (before drawing date)
-- `hasMinted(address)`: Check if address has claimed
-- `totalSupply()`: Current number of minted NFTs
+// In the init resources:
+resources: {
+  // ... existing languages
+  xx: { translation: xx },
+}
+```
 
-### Admin Functions
-- `pause()`/`unpause()`: Emergency stop mechanism
-- `setDrawingDate(uint256)`: Extend deadline (cannot reduce)
-- `updateBaseURI(string)`: Change NFT metadata URI
+4. Add to the language selector in `src/App.jsx`:
 
-### View Functions
-- `MAX_SUPPLY()`: Returns 10,000
-- `drawingDate()`: Unix timestamp of raffle drawing
-- `isMintingActive()`: Whether claiming is currently allowed
-- `paused()`: Contract pause status
+```javascript
+const languages = [
+  // ... existing languages
+  { code: 'xx', label: 'Language Name', flag: '🏳️' },
+];
+```
+
+### Feature Flags
+
+In `src/config/theme.config.js`:
+
+```javascript
+features: {
+  darkModeEnabled: true,        // Enable dark/light mode toggle
+  socialShareEnabled: true,     // Show social sharing buttons
+  analyticsEnabled: true,       // Enable Google Analytics
+  languageSelectorEnabled: true, // Show language dropdown
+  raffleEnabled: true,          // Show raffle countdown (also via env var)
+}
+```
+
+## Project Structure
+
+```
+unicorn-vite/
+├── public/                     # Static assets
+├── src/
+│   ├── config/
+│   │   └── theme.config.js     # Branding, colors, feature flags
+│   ├── contexts/
+│   │   └── ThemeContext.jsx    # Theme provider (dark/light mode)
+│   ├── locales/                # Translation files
+│   │   ├── en/translation.json
+│   │   ├── es/translation.json
+│   │   ├── zh/translation.json
+│   │   ├── ja/translation.json
+│   │   ├── he/translation.json
+│   │   └── ar/translation.json
+│   ├── utils/
+│   │   └── analytics.js        # Google Analytics integration
+│   ├── App.jsx                 # Main application component
+│   ├── i18n.js                 # i18next configuration
+│   ├── index.css               # Global styles & CSS variables
+│   └── main.jsx                # React entry point
+├── .env.example                # Environment variables template
+├── index.html                  # HTML entry with fonts
+├── tailwind.config.js          # Tailwind configuration
+├── vercel.json                 # Vercel deployment config
+└── vite.config.js              # Vite configuration
+```
+
+## Smart Contract Integration
+
+The app expects an ERC721 contract with these functions:
+
+### Required Functions
+
+```solidity
+function mint() external;
+function hasMinted(address) external view returns (bool);
+function totalSupply() external view returns (uint256);
+function MAX_SUPPLY() external view returns (uint256);
+function tokenURI(uint256 tokenId) external view returns (string);
+```
+
+### Optional Functions (for raffle feature)
+
+```solidity
+function drawingDate() external view returns (uint256);
+function isMintingActive() external view returns (bool);
+function paused() external view returns (bool);
+```
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Import the repository in [Vercel](https://vercel.com)
+3. Set the root directory to `unicorn-vite` (if in a monorepo)
+4. Add environment variables in Vercel dashboard
+5. Deploy!
+
+The included `vercel.json` handles the configuration automatically.
+
+### Manual Build
+
+```bash
+npm run build
+```
+
+The production build will be in the `dist/` folder, ready to deploy to any static hosting.
+
+## Browser Support
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
 
 ## Troubleshooting
 
 ### Common Issues
 
-**AutoConnect Not Working**:
+**AutoConnect Not Working**
 - Verify user has existing smart wallet from correct factory
 - Check client ID permissions in Thirdweb dashboard
-- Ensure proper environment variables are set
+- Ensure `walletId=inApp` and `authCookie` URL parameters are present
 
-**Gas Sponsorship Failing**:
-- Confirm gas sponsorship limits in Thirdweb dashboard
-- Verify contract is whitelisted for sponsorship
-- Check account abstraction configuration
+**NFT Image Not Loading**
+- Check if contract has `tokenURI` function
+- Verify IPFS gateway is accessible
+- Try setting `VITE_NFT_IMAGE_URL` as override
 
-**Build Errors**:
+**Build Errors**
 - Use `--legacy-peer-deps` flag for npm install
 - Ensure Node.js version 18+
 - Verify all environment variables are set
 
+**RTL Layout Issues**
+- Ensure `rtl:` Tailwind classes are used where needed
+- Check that `dir="rtl"` is being set on `<html>` element
+
 ### Development Tips
 
 - Use browser console to monitor AutoConnect process
-- Check localStorage for wallet session data
-- Verify contract calls return expected data types
-- Test with different wallet states (connected/disconnected)
+- Check localStorage for theme and language preferences
+- Test with `?lang=XX` URL parameter to force a language
 
 ## Contributing
 
@@ -251,29 +301,16 @@ Monitor via:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
 
-## Security Considerations
-
-- Never expose private keys or sensitive credentials
-- Validate all user inputs and contract responses
-- Implement proper error handling without information leakage
-- Monitor for unusual claiming patterns
-- Keep dependencies updated
-
 ## License
 
-This project is proprietary software for polygon.ac community use.
+This project is open source. See LICENSE file for details.
 
-## Support
+## Credits
 
-For technical issues:
-- Check browser console for error messages
-- Verify wallet connection and network
-- Ensure you have an authorized smart wallet
-
-For access issues:
-- Contact polygon.ac administrators
-- Verify your account status in the community
+- Built with [Thirdweb](https://thirdweb.com) v5 SDK
+- Powered by [unicorn.eth](https://myunicornaccount.com)
+- Fonts: [Manrope](https://fonts.google.com/specimen/Manrope) & [Inter](https://fonts.google.com/specimen/Inter)
 
 ---
 
-**Built with Thirdweb v5, React, and deployed on Vercel**
+**Made with ❤️ by the unicorn.eth team**

@@ -1,19 +1,19 @@
 {
   "header": {
-    "title": "Claim your {{appName}}",
-    "description": "Click \"Claim\" below to receive your {{appName}} NFT and be entered to win the {{prizeAmount}} raffle.",
+    "title": "Claim your {{appName}} ",
+    "description": "Click \"Claim\" below to receive your NFT.",
     "accessNote": "Existing {{platformName}} members only",
     "claimFree": "Claim for free"
   },
   "connection": {
     "lookingForWallet": "Looking for Existing Wallet...",
     "connectingToWallet": "Connecting to your wallet",
-    "onlyExistingWallets": "Only existing smart wallets from {{platformName}} can access this lottery",
+    "onlyExistingWallets": "Only existing smart wallets from {{platformName}} can access this gift",
     "factoryInfo": "Factory: {{factory}} | Client: {{client}}"
   },
   "access": {
     "required": "Access Required",
-    "onlyThroughPortal": "This {{appName}} lottery is only accessible through the official {{platformName}} portal.",
+    "onlyThroughPortal": "This service is only accessible through the official portal:",
     "mustAccessFromDashboard": "You must access this page from your {{platformName}} account dashboard to participate.",
     "howToAccess": "How to Access:",
     "step1": "Log in to your {{platformName}} account",
@@ -34,14 +34,14 @@
   },
   "errors": {
     "noWallet": "No Existing Wallet Found",
-    "lotteryOnlyForMembers": "This lottery is only available to users with a valid {{platformName}} account.",
-    "mustHaveSmartWallet": "You must have received a smart wallet from our system to participate."
+    "lotteryOnlyForMembers": "This service is only available to users with a valid {{platformName}} account.",
+    "mustHaveSmartWallet": "You must have received a smart wallet and account from our system to participate."
   },
   "status": {
     "paused": "Claiming Paused",
     "pausedDescription": "Claiming has been temporarily paused by the contract owner.",
     "ended": "Claiming Period Ended",
-    "endedDescription": "The drawing date has passed and {{appName}} claiming is no longer available.",
+    "endedDescription": "{{appName}} claiming is no longer available.",
     "drawingDate": "Drawing Date: {{date}}",
     "maxSupplyReached": "Max Supply Reached",
     "allClaimed": "All {{count}} Prizes have been claimed!"
@@ -58,7 +58,7 @@
   },
   "social": {
     "sharePrompt": "Share your claim:",
-    "shareMessage": "I claimed my free {{appName}} Collectible and entered the {{prizeAmount}} giveaway at {{url}}"
+    "shareMessage": "I claimed my free {{appName}} Collectible at {{url}}"
   },
   "connectionStatus": {
     "connected": "Connected",
@@ -74,6 +74,11 @@
     "en": "English",
     "es": "Spanish",
     "zh": "Chinese",
-    "ja": "Japanese"
+    "ja": "Japanese",
+    "he": "Hebrew",
+    "ar": "Arabic"
+  },
+  "footer": {
+    "poweredBy": "Powered by"
   }
 }

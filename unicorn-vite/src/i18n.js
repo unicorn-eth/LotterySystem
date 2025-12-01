@@ -6,6 +6,8 @@ import en from './locales/en/translation.json';
 import es from './locales/es/translation.json';
 import zh from './locales/zh/translation.json';
 import ja from './locales/ja/translation.json';
+import he from './locales/he/translation.json';
+import ar from './locales/ar/translation.json';
 
 i18n
   .use(LanguageDetector)
@@ -16,6 +18,8 @@ i18n
       es: { translation: es },
       zh: { translation: zh },
       ja: { translation: ja },
+      he: { translation: he },
+      ar: { translation: ar },
     },
     fallbackLng: 'en',
     interpolation: {

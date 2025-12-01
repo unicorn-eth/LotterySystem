@@ -2,36 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Default theme colors (light mode) - These are overridden by ThemeContext */
+/* Default theme colors (light mode) - BitBasel branding */
+/* These are overridden by ThemeContext */
 :root {
-  --color-primary: #A83DCC;
-  --color-primary-hover: #9333EA;
-  --color-secondary: #5B21B6;
+  --color-primary: #0099FF;
+  --color-primary-hover: #0077CC;
+  --color-secondary: #181818;
   --color-background: #FFFFFF;
-  --color-surface: #FBE9FB;
-  --color-surface-muted: #F3F4F6;
-  --color-border: #E5E7EB;
-  --color-border-accent: #D8B4FE;
-  --color-text: #1F2937;
-  --color-text-muted: #374151;
-  --color-text-light: #6B7280;
-  --color-success: #15803D;
+  --color-surface: #F5F5F5;
+  --color-surface-muted: #E7E7E7;
+  --color-border: #E7E7E7;
+  --color-border-accent: #0099FF;
+  --color-text: #181818;
+  --color-text-muted: #888888;
+  --color-text-light: #B0B0B0;
+  --color-success: #22C55E;
   --color-success-bg: #DCFCE7;
   --color-success-border: #86EFAC;
-  --color-warning: #A16207;
-  --color-warning-bg: #FEF9C3;
-  --color-warning-border: #FDE047;
-  --color-error: #991B1B;
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FEF3C7;
+  --color-warning-border: #FCD34D;
+  --color-error: #EF4444;
   --color-error-bg: #FEE2E2;
   --color-error-border: #FCA5A5;
-  --color-info: #9A3412;
-  --color-info-bg: #FFEDD5;
-  --color-info-border: #FDBA74;
+  --color-info: #0099FF;
+  --color-info-bg: #E0F2FE;
+  --color-info-border: #7DD3FC;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  /* BitBasel uses Manrope and Inter fonts */
+  font-family: 'Manrope', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;

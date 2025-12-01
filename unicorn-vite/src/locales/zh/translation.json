@@ -1,7 +1,7 @@
 {
   "header": {
-    "title": "领取您的 {{appName}}",
-    "description": "点击下方的\"领取\"按钮，获取您的 {{appName}} NFT 并参与 {{prizeAmount}} 抽奖。",
+    "title": "领取您的 {{appName}} NFT",
+    "description": "点击下方的\"领取\"按钮，获取您的 {{appName}} NFT。",
     "accessNote": "仅限 {{platformName}} 现有会员",
     "claimFree": "免费领取"
   },
@@ -13,7 +13,7 @@
   },
   "access": {
     "required": "需要访问权限",
-    "onlyThroughPortal": "此 {{appName}} 抽奖只能通过 {{platformName}} 官方门户访问。",
+    "onlyThroughPortal": "此服务只能通过官方门户访问：",
     "mustAccessFromDashboard": "您必须从您的 {{platformName}} 账户仪表板访问此页面才能参与。",
     "howToAccess": "如何访问：",
     "step1": "登录您的 {{platformName}} 账户",
@@ -41,7 +41,7 @@
     "paused": "领取已暂停",
     "pausedDescription": "合约所有者已暂时暂停领取。",
     "ended": "领取期已结束",
-    "endedDescription": "抽奖日期已过，{{appName}} 领取已不再可用。",
+    "endedDescription": "{{appName}} 领取已不再可用。",
     "drawingDate": "抽奖日期: {{date}}",
     "maxSupplyReached": "已达到最大供应量",
     "allClaimed": "所有 {{count}} 个奖品已被领取！"
@@ -58,7 +58,7 @@
   },
   "social": {
     "sharePrompt": "分享您的领取：",
-    "shareMessage": "我在 {{url}} 免费领取了 {{appName}} 收藏品并参与了 {{prizeAmount}} 抽奖"
+    "shareMessage": "我在 {{url}} 免费领取了 {{appName}} 收藏品"
   },
   "connectionStatus": {
     "connected": "已连接",
@@ -74,6 +74,11 @@
     "en": "英语",
     "es": "西班牙语",
     "zh": "中文",
-    "ja": "日语"
+    "ja": "日语",
+    "he": "希伯来语",
+    "ar": "阿拉伯语"
+  },
+  "footer": {
+    "poweredBy": "技术支持"
   }
 }

@@ -1,73 +1,82 @@
 // Theme and branding configuration
 // Customize these values to white-label the dapp
+// Based on BitBasel Vol. 6 branding
 
 export const themeConfig = {
   // App Branding - can be overridden via environment variables
-  appName: import.meta.env.VITE_APP_NAME || 'PolyPrize',
-  appEmoji: import.meta.env.VITE_APP_EMOJI || '🦄',
-  platformName: import.meta.env.VITE_PLATFORM_NAME || 'polygon.ac',
-  platformUrl: import.meta.env.VITE_PLATFORM_URL || 'https://polygon.ac',
+  appName: import.meta.env.VITE_APP_NAME || 'BitBasel Prize',
+  appEmoji: import.meta.env.VITE_APP_EMOJI || '🎨',
+  platformName: import.meta.env.VITE_PLATFORM_NAME || 'BitBasel',
+  platformUrl: import.meta.env.VITE_PLATFORM_URL || 'https://www.bitbasel.miami',
   prizeAmount: import.meta.env.VITE_PRIZE_AMOUNT || '$100',
-  shareUrl: import.meta.env.VITE_SHARE_URL || 'https://app.polygon.ac',
+  shareUrl: import.meta.env.VITE_SHARE_URL || 'https://www.bitbasel.miami/artweek',
 
   // Social handles for sharing
   social: {
-    twitter: import.meta.env.VITE_TWITTER_HANDLE || '@MyUnicornAcct @0xPolygon',
-    farcaster: import.meta.env.VITE_FARCASTER_HANDLE || '@unicornslfg',
-    bluesky: import.meta.env.VITE_BLUESKY_HANDLE || '@myunicornaccount',
+    twitter: import.meta.env.VITE_TWITTER_HANDLE || '@BitBaselMiami',
+    farcaster: import.meta.env.VITE_FARCASTER_HANDLE || '@bitbasel',
+    bluesky: import.meta.env.VITE_BLUESKY_HANDLE || '@bitbasel',
   },
 
-  // Colors (CSS custom properties)
+  // NFT Image (supports static images, GIFs, and videos)
+  nftImage: {
+    url: import.meta.env.VITE_NFT_IMAGE_URL || '',
+    alt: import.meta.env.VITE_NFT_IMAGE_ALT || 'NFT Preview',
+    // Set to true if the URL is a video (mp4, webm)
+    isVideo: import.meta.env.VITE_NFT_IMAGE_IS_VIDEO === 'true',
+  },
+
+  // BitBasel Color Palette - Minimalist black/white with cyan accents
   colors: {
     light: {
-      primary: '#A83DCC',        // Main brand color (purple)
-      primaryHover: '#9333EA',   // Hover state
-      secondary: '#5B21B6',      // Secondary accent
-      background: '#FFFFFF',     // Page background
-      surface: '#FBE9FB',        // Card/highlight backgrounds
-      surfaceMuted: '#F3F4F6',   // Gray card backgrounds (gray-100)
-      border: '#E5E7EB',         // Default borders (gray-200)
-      borderAccent: '#D8B4FE',   // Purple borders (purple-300)
-      text: '#1F2937',           // Primary text (gray-800)
-      textMuted: '#374151',      // Secondary text (gray-700)
-      textLight: '#6B7280',      // Light text (gray-500)
-      success: '#15803D',        // Success text (green-700)
-      successBg: '#DCFCE7',      // Success background (green-100)
-      successBorder: '#86EFAC',  // Success border (green-300)
-      warning: '#A16207',        // Warning text (yellow-700)
-      warningBg: '#FEF9C3',      // Warning background (yellow-100)
-      warningBorder: '#FDE047',  // Warning border (yellow-300)
-      error: '#991B1B',          // Error text (red-800)
-      errorBg: '#FEE2E2',        // Error background (red-100)
-      errorBorder: '#FCA5A5',    // Error border (red-300)
-      info: '#9A3412',           // Info text (orange-800)
-      infoBg: '#FFEDD5',         // Info background (orange-100)
-      infoBorder: '#FDBA74',     // Info border (orange-300)
+      primary: '#0099FF',           // Cyan accent (#09f)
+      primaryHover: '#0077CC',      // Darker cyan on hover
+      secondary: '#181818',         // Dark gray
+      background: '#FFFFFF',        // White background
+      surface: '#F5F5F5',           // Light gray cards
+      surfaceMuted: '#E7E7E7',      // Muted gray backgrounds
+      border: '#E7E7E7',            // Light border
+      borderAccent: '#0099FF',      // Cyan accent border
+      text: '#181818',              // Dark gray text
+      textMuted: '#888888',         // Medium gray text
+      textLight: '#B0B0B0',         // Light gray text
+      success: '#22C55E',           // Green
+      successBg: '#DCFCE7',         // Light green
+      successBorder: '#86EFAC',     // Green border
+      warning: '#F59E0B',           // Amber
+      warningBg: '#FEF3C7',         // Light amber
+      warningBorder: '#FCD34D',     // Amber border
+      error: '#EF4444',             // Red
+      errorBg: '#FEE2E2',           // Light red
+      errorBorder: '#FCA5A5',       // Red border
+      info: '#0099FF',              // Cyan (matches primary)
+      infoBg: '#E0F2FE',            // Light cyan
+      infoBorder: '#7DD3FC',        // Cyan border
     },
     dark: {
-      primary: '#C084FC',        // Lighter purple for dark mode
-      primaryHover: '#A855F7',   // Hover state
-      secondary: '#7C3AED',      // Secondary accent
-      background: '#111827',     // Page background (gray-900)
-      surface: '#2D1F3D',        // Card/highlight backgrounds (purple tint)
-      surfaceMuted: '#1F2937',   // Gray card backgrounds (gray-800)
-      border: '#374151',         // Default borders (gray-700)
-      borderAccent: '#7C3AED',   // Purple borders
-      text: '#F9FAFB',           // Primary text (gray-50)
-      textMuted: '#E5E7EB',      // Secondary text (gray-200)
-      textLight: '#9CA3AF',      // Light text (gray-400)
-      success: '#22C55E',        // Success text
-      successBg: '#14532D',      // Success background
-      successBorder: '#166534',  // Success border
-      warning: '#FBBF24',        // Warning text
-      warningBg: '#78350F',      // Warning background
-      warningBorder: '#92400E',  // Warning border
-      error: '#F87171',          // Error text
-      errorBg: '#7F1D1D',        // Error background
-      errorBorder: '#991B1B',    // Error border
-      info: '#FB923C',           // Info text
-      infoBg: '#7C2D12',         // Info background
-      infoBorder: '#9A3412',     // Info border
+      primary: '#0099FF',           // Cyan stays vibrant in dark
+      primaryHover: '#33ADFF',      // Lighter cyan on hover
+      secondary: '#E7E7E7',         // Light gray for contrast
+      background: '#000000',        // Pure black (BitBasel style)
+      surface: '#181818',           // Dark gray cards
+      surfaceMuted: '#111111',      // Slightly lighter than black
+      border: '#333333',            // Dark border
+      borderAccent: '#0099FF',      // Cyan accent border
+      text: '#FFFFFF',              // White text
+      textMuted: '#B0B0B0',         // Light gray text
+      textLight: '#888888',         // Medium gray text
+      success: '#22C55E',           // Green
+      successBg: '#14532D',         // Dark green
+      successBorder: '#166534',     // Green border
+      warning: '#FBBF24',           // Amber
+      warningBg: '#78350F',         // Dark amber
+      warningBorder: '#92400E',     // Amber border
+      error: '#F87171',             // Light red
+      errorBg: '#7F1D1D',           // Dark red
+      errorBorder: '#991B1B',       // Red border
+      info: '#38BDF8',              // Light cyan
+      infoBg: '#0C4A6E',            // Dark cyan
+      infoBorder: '#0369A1',        // Cyan border
     }
   },
 
@@ -77,6 +86,7 @@ export const themeConfig = {
     socialShareEnabled: true,
     analyticsEnabled: true,
     languageSelectorEnabled: true,
+    raffleEnabled: import.meta.env.VITE_RAFFLE_ENABLED !== 'false', // Enabled by default
   }
 };
 

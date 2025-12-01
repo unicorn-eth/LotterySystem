@@ -85,6 +85,9 @@ const contract = getContract({
   address: CONTRACT_ADDRESS || "",
 });
 
+// RTL languages
+const RTL_LANGUAGES = ['he', 'ar'];
+
 // Language Selector Component
 function LanguageSelector() {
   const { i18n, t } = useTranslation();
@@ -95,9 +98,18 @@ function LanguageSelector() {
     { code: 'es', label: 'Español', flag: '🇪🇸' },
     { code: 'zh', label: '中文', flag: '🇨🇳' },
     { code: 'ja', label: '日本語', flag: '🇯🇵' },
+    { code: 'he', label: 'עברית', flag: '🇮🇱' },
+    { code: 'ar', label: 'العربية', flag: '🇸🇦' },
   ];
 
   const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
+
+  // Update document direction when language changes
+  useEffect(() => {
+    const isRTL = RTL_LANGUAGES.includes(i18n.language);
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.documentElement.lang = i18n.language;
+  }, [i18n.language]);
 
   if (!themeConfig.features.languageSelectorEnabled) return null;
 
@@ -114,7 +126,7 @@ function LanguageSelector() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 py-2 w-40 bg-surface-muted border border-default rounded-lg shadow-lg z-50">
+        <div className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 py-2 w-40 bg-surface-muted border border-default rounded-lg shadow-lg z-50">
           {languages.map((lang) => (
             <button
               key={lang.code}
@@ -122,7 +134,7 @@ function LanguageSelector() {
                 i18n.changeLanguage(lang.code);
                 setIsOpen(false);
               }}
-              className={`w-full px-4 py-2 text-left flex items-center gap-2 hover:bg-surface transition-colors text-base ${
+              className={`w-full px-4 py-2 text-left rtl:text-right flex items-center gap-2 hover:bg-surface transition-colors text-base ${
                 i18n.language === lang.code ? 'bg-surface' : ''
               }`}
             >
@@ -245,6 +257,130 @@ function App() {
   );
 }
 
+// NFT Preview Component - fetches image from contract metadata
+function NFTPreview() {
+  const { t } = useTranslation();
+  const [nftImage, setNftImage] = useState(null);
+  const [isVideo, setIsVideo] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Try to get tokenURI from contract (token ID 1 as sample)
+  const { data: tokenURI } = useReadContract({
+    contract,
+    method: "function tokenURI(uint256 tokenId) view returns (string)",
+    params: [1n],
+  });
+
+  // Fetch metadata and extract image
+  useEffect(() => {
+    const fetchMetadata = async () => {
+      // First check if there's a manual override in config
+      if (themeConfig.nftImage.url) {
+        setNftImage(themeConfig.nftImage.url);
+        setIsVideo(themeConfig.nftImage.isVideo);
+        setLoading(false);
+        return;
+      }
+
+      if (!tokenURI) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        let metadataUrl = tokenURI;
+
+        // Handle IPFS URLs
+        if (tokenURI.startsWith('ipfs://')) {
+          metadataUrl = tokenURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
+        }
+
+        // Handle base64 encoded JSON
+        if (tokenURI.startsWith('data:application/json;base64,')) {
+          const base64Data = tokenURI.replace('data:application/json;base64,', '');
+          const jsonString = atob(base64Data);
+          const metadata = JSON.parse(jsonString);
+          processMetadata(metadata);
+          return;
+        }
+
+        // Handle data:application/json
+        if (tokenURI.startsWith('data:application/json,')) {
+          const jsonString = decodeURIComponent(tokenURI.replace('data:application/json,', ''));
+          const metadata = JSON.parse(jsonString);
+          processMetadata(metadata);
+          return;
+        }
+
+        // Fetch remote metadata
+        const response = await fetch(metadataUrl);
+        const metadata = await response.json();
+        processMetadata(metadata);
+      } catch (error) {
+        console.error('Error fetching NFT metadata:', error);
+        setLoading(false);
+      }
+    };
+
+    const processMetadata = (metadata) => {
+      let imageUrl = metadata.image || metadata.image_url || metadata.animation_url;
+
+      if (imageUrl) {
+        // Handle IPFS image URLs
+        if (imageUrl.startsWith('ipfs://')) {
+          imageUrl = imageUrl.replace('ipfs://', 'https://ipfs.io/ipfs/');
+        }
+
+        // Check if it's a video
+        const videoExtensions = ['.mp4', '.webm', '.mov'];
+        const isVideoFile = videoExtensions.some(ext => imageUrl.toLowerCase().includes(ext)) ||
+                           metadata.animation_url;
+
+        setNftImage(imageUrl);
+        setIsVideo(isVideoFile);
+      }
+      setLoading(false);
+    };
+
+    fetchMetadata();
+  }, [tokenURI]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center mb-8">
+        <div className="w-64 h-64 rounded-xl bg-surface-muted border border-default animate-pulse flex items-center justify-center">
+          <span className="text-muted">Loading NFT...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!nftImage) return null;
+
+  return (
+    <div className="flex justify-center mb-8">
+      <div className="relative rounded-xl overflow-hidden shadow-lg border border-accent max-w-sm">
+        {isVideo ? (
+          <video
+            src={nftImage}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-auto max-h-80 object-contain bg-surface"
+          />
+        ) : (
+          <img
+            src={nftImage}
+            alt={themeConfig.nftImage.alt || 'NFT Preview'}
+            className="w-full h-auto max-h-80 object-contain bg-surface"
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Header() {
   const { t } = useTranslation();
   const account = useActiveAccount();
@@ -260,6 +396,7 @@ function Header() {
       <p className="text-sm text-primary mb-8">
         🔐 {t('header.accessNote', { platformName: themeConfig.platformName })} • {t('header.claimFree')}
       </p>
+      <NFTPreview />
     </div>
   );
 }
@@ -526,12 +663,20 @@ function MintingInterface({ shouldAutoConnect }) {
         <div className="bg-surface-muted rounded-lg p-8 max-w-md mx-auto border border-default">
           <h2 className="text-2xl font-bold text-base mb-4">🔐 {t('access.required')}</h2>
           <p className="text-muted text-lg mb-4">
-            {t('access.onlyThroughPortal', { appName: themeConfig.appName, platformName: themeConfig.platformName })}
+            {t('access.onlyThroughPortal')}{' '}
+            <a
+              href={themeConfig.shareUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline font-medium"
+            >
+              {themeConfig.platformName}
+            </a>
           </p>
           <p className="text-light text-sm mb-6">
             {t('access.mustAccessFromDashboard', { platformName: themeConfig.platformName })}
           </p>
-          <div className="bg-surface border border-accent rounded-lg p-4 text-left">
+          <div className="bg-surface border border-accent rounded-lg p-4 text-left rtl:text-right">
             <p className="text-primary text-sm font-semibold mb-2">{t('access.howToAccess')}</p>
             <ul className="text-primary text-sm space-y-1">
               <li>• {t('access.step1', { platformName: themeConfig.platformName })}</li>
@@ -621,8 +766,8 @@ function MintingInterface({ shouldAutoConnect }) {
           </div>
         )}
       </div>
-            {/* Drawing Date Info */}
-      {drawingDate && (
+            {/* Drawing Date Info - Only show if raffle is enabled */}
+      {themeConfig.features.raffleEnabled && drawingDate && (
         <div className="border border-accent rounded-lg p-6 mb-8 bg-surface">
           <h3 className="text-xl font-bold text-primary mb-2 flex items-center">
             ⏰ {t('drawing.title', { prizeAmount: themeConfig.prizeAmount, drawingName: 'Second PolyPrize Drawing' })}
@@ -700,6 +845,21 @@ function MintingInterface({ shouldAutoConnect }) {
             </p>
           </div>
         )}
+      </div>
+
+      {/* Powered by Unicorn.eth */}
+      <div className="text-center mt-8 mb-4">
+        <p className="text-sm text-muted">
+          {t('footer.poweredBy')}{' '}
+          <a
+            href="https://myunicornaccount.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline font-medium"
+          >
+            unicorn.eth
+          </a>
+        </p>
       </div>
 
     </div>

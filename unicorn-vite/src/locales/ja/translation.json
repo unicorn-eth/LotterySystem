@@ -1,7 +1,7 @@
 {
   "header": {
-    "title": "{{appName}}を請求する",
-    "description": "下の「請求」をクリックして、{{appName}} NFTを受け取り、{{prizeAmount}}の抽選に参加しましょう。",
+    "title": "{{appName}} NFTを請求する",
+    "description": "下の「請求」をクリックして、{{appName}} NFTを受け取りましょう。",
     "accessNote": "{{platformName}}の既存メンバー限定",
     "claimFree": "無料で請求"
   },
@@ -13,7 +13,7 @@
   },
   "access": {
     "required": "アクセス権が必要です",
-    "onlyThroughPortal": "この{{appName}}抽選は、{{platformName}}公式ポータルからのみアクセス可能です。",
+    "onlyThroughPortal": "このサービスは公式ポータルからのみアクセス可能です：",
     "mustAccessFromDashboard": "参加するには、{{platformName}}アカウントダッシュボードからこのページにアクセスする必要があります。",
     "howToAccess": "アクセス方法：",
     "step1": "{{platformName}}アカウントにログイン",
@@ -41,7 +41,7 @@
     "paused": "請求一時停止中",
     "pausedDescription": "コントラクトオーナーにより請求が一時的に停止されています。",
     "ended": "請求期間終了",
-    "endedDescription": "抽選日が過ぎ、{{appName}}の請求は利用できなくなりました。",
+    "endedDescription": "{{appName}}の請求は利用できなくなりました。",
     "drawingDate": "抽選日: {{date}}",
     "maxSupplyReached": "最大供給量に到達",
     "allClaimed": "全{{count}}個の賞品が請求されました！"
@@ -58,7 +58,7 @@
   },
   "social": {
     "sharePrompt": "請求をシェア：",
-    "shareMessage": "{{url}}で無料の{{appName}}コレクティブルを請求し、{{prizeAmount}}の抽選に参加しました"
+    "shareMessage": "{{url}}で無料の{{appName}}コレクティブルを請求しました"
   },
   "connectionStatus": {
     "connected": "接続済み",
@@ -74,6 +74,11 @@
     "en": "英語",
     "es": "スペイン語",
     "zh": "中国語",
-    "ja": "日本語"
+    "ja": "日本語",
+    "he": "ヘブライ語",
+    "ar": "アラビア語"
+  },
+  "footer": {
+    "poweredBy": "提供"
   }
 }
