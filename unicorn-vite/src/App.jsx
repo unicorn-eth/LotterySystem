@@ -718,7 +718,7 @@ function MintingInterface({ shouldAutoConnect }) {
               </p>
             </div>
           </div>
-        ) : !isMintingActive ? (
+        ) : !isMintingActive && !themeConfig.features.allowPostDrawingMint ? (
           <div className="text-center">
             <div className="bg-error-bg border border-error-border rounded-lg p-6 mb-4">
               <h3 className="text-xl font-semibold text-error mb-2">🚫 {t('status.ended')}</h3>

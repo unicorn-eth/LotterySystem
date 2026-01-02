@@ -96,8 +96,11 @@ features: {
   analyticsEnabled: true,
   languageSelectorEnabled: true,
   raffleEnabled: true, // can override via VITE_RAFFLE_ENABLED
+  allowPostDrawingMint: false, // can override via VITE_ALLOW_POST_DRAWING_MINT
 }
 ```
+
+`allowPostDrawingMint`: When enabled, users can claim NFTs even after the contract's `isMintingActive()` returns false. Useful for continued engagement after lottery ends or segmenting campaigns with the same contract. Contract constraints (MAX_SUPPLY, paused state) still apply.
 
 ## Adding a New Language
 

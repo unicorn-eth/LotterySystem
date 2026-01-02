@@ -87,6 +87,7 @@ export const themeConfig = {
     analyticsEnabled: true,
     languageSelectorEnabled: true,
     raffleEnabled: import.meta.env.VITE_RAFFLE_ENABLED !== 'false', // Enabled by default
+    allowPostDrawingMint: import.meta.env.VITE_ALLOW_POST_DRAWING_MINT === 'true', // Disabled by default
   }
 };
 
