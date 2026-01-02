@@ -18,6 +18,8 @@ async function main() {
   const baseAnimationURI = process.env.BASE_ANIMATION_URI;
   const drawingDate = process.env.DRAWING_DATE;
   const isSoulbound = process.env.IS_SOULBOUND?.toLowerCase() === "true";
+  const accountFactory = process.env.ACCOUNT_FACTORY || "0x0000000000000000000000000000000000000000";
+  const mintPrice = process.env.MINT_PRICE || "0";
 
   // Validate required fields
   const missing = [];
@@ -42,6 +44,8 @@ async function main() {
   console.log("  baseAnimationURI:", baseAnimationURI);
   console.log("  drawingDate:", drawingDate, "(", new Date(parseInt(drawingDate) * 1000).toISOString(), ")");
   console.log("  isSoulbound:", isSoulbound);
+  console.log("  accountFactory:", accountFactory);
+  console.log("  mintPrice:", mintPrice, "wei", accountFactory === "0x0000000000000000000000000000000000000000" ? "(applies to all)" : "(for non-factory accounts)");
 
   const PolyPrizeUnicorn = await hre.ethers.getContractFactory("PolyPrizeUnicorn");
   const contract = await PolyPrizeUnicorn.deploy(
@@ -51,7 +55,9 @@ async function main() {
     baseImageURI,
     baseAnimationURI,
     drawingDate,
-    isSoulbound
+    isSoulbound,
+    accountFactory,
+    mintPrice
   );
 
   await contract.waitForDeployment();
@@ -81,7 +87,9 @@ async function main() {
           baseImageURI,
           baseAnimationURI,
           drawingDate,
-          isSoulbound
+          isSoulbound,
+          accountFactory,
+          mintPrice
         ],
       });
       console.log("✅ Contract verified successfully!");
@@ -90,14 +98,11 @@ async function main() {
         console.log("✅ Contract is already verified!");
       } else {
         console.error("❌ Verification failed:", error.message);
-        console.log("\nTo verify manually:");
-        console.log(`npx hardhat verify --network ${hre.network.name} ${contractAddress} "${collectionName}" "${symbol}" "${collectionDescription}" "${baseImageURI}" "${baseAnimationURI}" ${drawingDate} ${isSoulbound}`);
+        console.log("\nTo verify manually, use hardhat verify command with constructor args.");
       }
     }
   } else {
     console.log("\n⚠️  ETHERSCAN_API_KEY not set - skipping verification");
-    console.log("To verify manually:");
-    console.log(`npx hardhat verify --network ${hre.network.name} ${contractAddress} "${collectionName}" "${symbol}" "${collectionDescription}" "${baseImageURI}" "${baseAnimationURI}" ${drawingDate} ${isSoulbound}`);
   }
 }
 

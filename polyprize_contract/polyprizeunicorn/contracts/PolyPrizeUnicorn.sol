@@ -8,6 +8,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
 
+// Interface for Thirdweb AccountFactory to check if address is a registered smart account
+interface IAccountFactory {
+    function isRegistered(address account) external view returns (bool);
+}
+
 // Coded lovingly by @cryptowampum and Claude AI
 contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
     using Strings for uint256;
@@ -22,6 +27,12 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
 
     // Soulbound configuration
     bool public immutable isSoulbound;
+
+    // Account factory for free minting (smart accounts from this factory mint free)
+    address public immutable accountFactory;
+
+    // Mint price for direct minters (not from factory)
+    uint256 public mintPrice;
 
     // Collection metadata
     string private _collectionName;
@@ -38,9 +49,10 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
     event DrawingDateUpdated(uint256 oldDate, uint256 newDate);
     event BaseImageURIUpdated(string oldURI, string newURI);
     event BaseAnimationURIUpdated(string oldURI, string newURI);
-    event Minted(address indexed to, uint256 indexed tokenId);
+    event Minted(address indexed to, uint256 indexed tokenId, bool paidMint);
     event AllowMintingAfterDrawingUpdated(bool oldValue, bool newValue);
     event CollectionDescriptionUpdated(string oldDescription, string newDescription);
+    event MintPriceUpdated(uint256 oldPrice, uint256 newPrice);
 
     // Manual Pausable Events
     event Paused(address account);
@@ -53,7 +65,9 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
         string memory baseImageURI_,       // The IPFS static image URI
         string memory baseAnimationURI_,   // The IPFS MP4 video URI
         uint256 drawingDate_,              // Unix timestamp
-        bool isSoulbound_                  // Whether transfers are blocked
+        bool isSoulbound_,                 // Whether transfers are blocked
+        address accountFactory_,           // Thirdweb AccountFactory address (for free mints)
+        uint256 mintPrice_                 // Price for direct mints (in wei, 0 = free for all)
     )
         ERC721(collectionName_, symbol_)
         Ownable(msg.sender)
@@ -70,6 +84,8 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
         baseAnimationURI = baseAnimationURI_;
         drawingDate = drawingDate_;
         isSoulbound = isSoulbound_;
+        accountFactory = accountFactory_;
+        mintPrice = mintPrice_;
     }
 
     // Manual Pausable Implementation
@@ -102,6 +118,18 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
         return tokenId > 0 && tokenId < _nextTokenId;
     }
 
+    // Check if caller is a registered smart account from the factory
+    function _isFromFactory(address account) internal view returns (bool) {
+        if (accountFactory == address(0)) {
+            return false;
+        }
+        try IAccountFactory(accountFactory).isRegistered(account) returns (bool registered) {
+            return registered;
+        } catch {
+            return false;
+        }
+    }
+
     // Main contract modifiers and functions
     modifier beforeDrawing() {
         require(
@@ -112,12 +140,22 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
         _;
     }
 
-    function mint() external beforeDrawing whenNotPaused {
+    function mint() external payable beforeDrawing whenNotPaused {
         require(!hasMinted[msg.sender], "Already minted");
+
+        // Check if payment is required
+        bool isFactoryAccount = _isFromFactory(msg.sender);
+        bool paidMint = false;
+
+        if (!isFactoryAccount && mintPrice > 0) {
+            require(msg.value >= mintPrice, "Insufficient payment for direct mint");
+            paidMint = true;
+        }
+
         hasMinted[msg.sender] = true;
         uint256 tokenId = _nextTokenId++;
         minters[tokenId] = msg.sender;
-        emit Minted(msg.sender, tokenId);
+        emit Minted(msg.sender, tokenId, paidMint);
         _safeMint(msg.sender, tokenId);
     }
 
@@ -206,9 +244,21 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
         emit DrawingDateUpdated(oldDate, newDate);
     }
 
+    // Set mint price for direct minters
+    function setMintPrice(uint256 newPrice) external onlyOwner {
+        uint256 oldPrice = mintPrice;
+        mintPrice = newPrice;
+        emit MintPriceUpdated(oldPrice, newPrice);
+    }
+
     // Utility functions
     function isMintingActive() external view returns (bool) {
         return (block.timestamp < drawingDate || allowMintingAfterDrawing) && !_paused;
+    }
+
+    // Check if an address would mint for free
+    function isFreeForAddress(address account) external view returns (bool) {
+        return _isFromFactory(account) || mintPrice == 0;
     }
 
     // Toggle allow minting after drawing date
