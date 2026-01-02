@@ -6,11 +6,12 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 
 // Coded lovingly by @cryptowampum and Claude AI
 contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
     using Strings for uint256;
-    
+
     uint256 public constant MAX_SUPPLY = 10000;
 
     // Manual Pausable Implementation (avoiding problematic import)
@@ -18,6 +19,13 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
 
     // Allow minting after drawing date (for continued engagement/campaign segmentation)
     bool public allowMintingAfterDrawing = false;
+
+    // Soulbound configuration
+    bool public immutable isSoulbound;
+
+    // Collection metadata
+    string private _collectionName;
+    string private _collectionDescription;
 
     uint256 public drawingDate;
     uint256 private _nextTokenId = 1;
@@ -32,26 +40,36 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
     event BaseAnimationURIUpdated(string oldURI, string newURI);
     event Minted(address indexed to, uint256 indexed tokenId);
     event AllowMintingAfterDrawingUpdated(bool oldValue, bool newValue);
-    
+    event CollectionDescriptionUpdated(string oldDescription, string newDescription);
+
     // Manual Pausable Events
     event Paused(address account);
     event Unpaused(address account);
 
     constructor(
-        string memory _baseImageURI,      // The IPFS static image URI
-        string memory _baseAnimationURI,  // The IPFS MP4 video URI
-        uint256 _drawingDate              // Unix timestamp
+        string memory collectionName_,     // ERC721 name (e.g., "My NFT Collection")
+        string memory symbol_,             // ERC721 symbol (e.g., "MNFT")
+        string memory collectionDescription_, // Description for tokenURI
+        string memory baseImageURI_,       // The IPFS static image URI
+        string memory baseAnimationURI_,   // The IPFS MP4 video URI
+        uint256 drawingDate_,              // Unix timestamp
+        bool isSoulbound_                  // Whether transfers are blocked
     )
-        ERC721("Unicorn.eth PolyPrize Collection", "UUPC")
-        Ownable(msg.sender)  // Pass initial owner to Ownable constructor
+        ERC721(collectionName_, symbol_)
+        Ownable(msg.sender)
     {
-        require(bytes(_baseImageURI).length > 0, "Base image URI cannot be empty");
-        require(bytes(_baseAnimationURI).length > 0, "Base animation URI cannot be empty");
-        require(_drawingDate > block.timestamp, "Drawing date must be in future");
+        require(bytes(collectionName_).length > 0, "Collection name cannot be empty");
+        require(bytes(symbol_).length > 0, "Symbol cannot be empty");
+        require(bytes(baseImageURI_).length > 0, "Base image URI cannot be empty");
+        require(bytes(baseAnimationURI_).length > 0, "Base animation URI cannot be empty");
+        require(drawingDate_ > block.timestamp, "Drawing date must be in future");
 
-        baseImageURI = _baseImageURI;
-        baseAnimationURI = _baseAnimationURI;
-        drawingDate = _drawingDate;
+        _collectionName = collectionName_;
+        _collectionDescription = collectionDescription_;
+        baseImageURI = baseImageURI_;
+        baseAnimationURI = baseAnimationURI_;
+        drawingDate = drawingDate_;
+        isSoulbound = isSoulbound_;
     }
 
     // Manual Pausable Implementation
@@ -104,55 +122,77 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
     }
 
     // Required overrides for OpenZeppelin v5 compatibility
-    function _update(address to, uint256 tokenId, address auth) 
-        internal 
-        override(ERC721, ERC721Enumerable) 
-        returns (address) 
+    function _update(address to, uint256 tokenId, address auth)
+        internal
+        override(ERC721, ERC721Enumerable)
+        returns (address)
     {
-        // SOULBOUND: Block transfers except mints and burns
-        address from = _ownerOf(tokenId);
-        if (from != address(0) && to != address(0)) {
-            revert("Soulbound: transfers disabled");
+        // SOULBOUND: Block transfers except mints and burns (if enabled)
+        if (isSoulbound) {
+            address from = _ownerOf(tokenId);
+            if (from != address(0) && to != address(0)) {
+                revert("Soulbound: transfers disabled");
+            }
         }
-        
+
         return super._update(to, tokenId, auth);
     }
 
-    function _increaseBalance(address account, uint128 value) 
-        internal 
-        override(ERC721, ERC721Enumerable) 
+    function _increaseBalance(address account, uint128 value)
+        internal
+        override(ERC721, ERC721Enumerable)
     {
         super._increaseBalance(account, value);
     }
 
-    // SOULBOUND: Block all approvals (specify both overridden contracts)
-    function approve(address, uint256) public pure override(ERC721, IERC721) {
-        revert("Soulbound: approvals disabled");
-    }
-    
-    function setApprovalForAll(address, bool) public pure override(ERC721, IERC721) {
-        revert("Soulbound: approvals disabled");
+    // SOULBOUND: Block all approvals if soulbound (specify both overridden contracts)
+    function approve(address to, uint256 tokenId) public override(ERC721, IERC721) {
+        if (isSoulbound) {
+            revert("Soulbound: approvals disabled");
+        }
+        super.approve(to, tokenId);
     }
 
-    // On-chain metadata: includes BOTH image and animation_url
+    function setApprovalForAll(address operator, bool approved) public override(ERC721, IERC721) {
+        if (isSoulbound) {
+            revert("Soulbound: approvals disabled");
+        }
+        super.setApprovalForAll(operator, approved);
+    }
+
+    // On-chain metadata with Base64 encoding for proper JSON handling
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(_tokenExists(tokenId), "Token does not exist");
         require(ownerOf(tokenId) != address(0), "Token was burned or never minted");
-        
+
         address minter = minters[tokenId];
         string memory walletStr = Strings.toHexString(uint160(minter), 20);
+
+        // Build description based on soulbound status
+        string memory description = bytes(_collectionDescription).length > 0
+            ? _collectionDescription
+            : string(abi.encodePacked(
+                isSoulbound ? "Soulbound NFT" : "NFT",
+                " minted to wallet ",
+                walletStr
+            ));
+
+        // Build JSON metadata
+        bytes memory json = abi.encodePacked(
+            '{"name":"', _collectionName, ' #', tokenId.toString(), '",',
+            '"description":"', description, '",',
+            '"image":"', baseImageURI, '",',
+            '"animation_url":"', baseAnimationURI, '",',
+            '"attributes":[',
+                '{"trait_type":"Wallet","value":"', walletStr, '"},',
+                '{"trait_type":"Drawing Date","display_type":"date","value":', drawingDate.toString(), '},',
+                '{"trait_type":"Soulbound","value":"', isSoulbound ? "Yes" : "No", '"}',
+            ']}'
+        );
+
         return string(abi.encodePacked(
-            "data:application/json;utf8,",
-            "{",
-                '"name":"Unicorn.eth PolyPrize #', tokenId.toString(), '",',
-                '"description":"Soulbound NFT, minted to wallet ', walletStr, ' for the PolyPrize drawing.",',
-                '"image":"', baseImageURI, '",',                    // Static image
-                '"animation_url":"', baseAnimationURI, '",',         // MP4 video
-                '"attributes":[',
-                    '{ "trait_type": "Wallet", "value": "', walletStr, '" },',
-                    '{ "trait_type": "Drawing Date", "display_type": "date", "value": ', drawingDate.toString(), ' }',
-                ']',
-            "}"
+            "data:application/json;base64,",
+            Base64.encode(json)
         ));
     }
 
@@ -160,7 +200,7 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
     function setDrawingDate(uint256 newDate) external onlyOwner {
         require(newDate > drawingDate, "Can only extend drawing date");
         require(newDate > block.timestamp, "Drawing date must be in future");
-        
+
         uint256 oldDate = drawingDate;
         drawingDate = newDate;
         emit DrawingDateUpdated(oldDate, newDate);
@@ -177,6 +217,7 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
         allowMintingAfterDrawing = _allow;
         emit AllowMintingAfterDrawingUpdated(oldValue, _allow);
     }
+
     function timeUntilDrawing() external view returns (uint256) {
         return block.timestamp < drawingDate ? drawingDate - block.timestamp : 0;
     }
@@ -185,7 +226,14 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
         (bool success, ) = payable(owner()).call{value: address(this).balance}("");
         require(success, "ETH withdrawal failed");
     }
-    
+
+    // Update collection description
+    function updateCollectionDescription(string memory newDescription) external onlyOwner {
+        string memory oldDescription = _collectionDescription;
+        _collectionDescription = newDescription;
+        emit CollectionDescriptionUpdated(oldDescription, newDescription);
+    }
+
     // Update static image URI
     function updateBaseImageURI(string memory newBaseImageURI) external onlyOwner {
         require(bytes(newBaseImageURI).length > 0, "Base image URI cannot be empty");
@@ -193,7 +241,7 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
         baseImageURI = newBaseImageURI;
         emit BaseImageURIUpdated(oldURI, newBaseImageURI);
     }
-    
+
     // Update animation/video URI
     function updateBaseAnimationURI(string memory newBaseAnimationURI) external onlyOwner {
         require(bytes(newBaseAnimationURI).length > 0, "Base animation URI cannot be empty");
@@ -202,13 +250,17 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
         emit BaseAnimationURIUpdated(oldURI, newBaseAnimationURI);
     }
 
-    // View functions to check current URIs
+    // View functions
     function getBaseImageURI() external view returns (string memory) {
         return baseImageURI;
     }
-    
+
     function getBaseAnimationURI() external view returns (string memory) {
         return baseAnimationURI;
+    }
+
+    function getCollectionDescription() external view returns (string memory) {
+        return _collectionDescription;
     }
 
     // Required override for ERC721Enumerable
