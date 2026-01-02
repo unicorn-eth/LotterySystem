@@ -11,7 +11,7 @@ import {
 } from "thirdweb/react";
 import { createThirdwebClient, getContract, prepareContractCall } from "thirdweb";
 import { inAppWallet } from "thirdweb/wallets";
-import { polygon } from "thirdweb/chains";
+import { polygon,arbitrum,optimism,base,sepolia } from "thirdweb/chains";
 import {
   initGA,
   trackPageView,
@@ -46,12 +46,24 @@ const isValidAddress = (address) => {
   return address && /^0x[a-fA-F0-9]{40}$/.test(address);
 };
 
+// Chain mapping - convert network name to chain object
+const CHAINS = {
+  polygon,
+  arbitrum,
+  optimism,
+  base,
+  sepolia,
+};
+
+const networkName = import.meta.env.VITE_APP_NETWORK_NAME || "base";
+const chain = CHAINS[networkName] || base;
+
 // Configure wallets with proper factory address for AutoConnect
 const supportedWallets = [
   inAppWallet({
     smartAccount: {
-      factoryAddress: factoryAddress , // Unicorn factory address
-      chain: polygon,
+      factoryAddress: factoryAddress,
+      chain: chain,
       gasless: true,
       sponsorGas: true,
     }
@@ -81,7 +93,7 @@ if (process.env.NODE_ENV === 'development') {
 
 const contract = getContract({
   client,
-  chain: polygon,
+  chain: chain,
   address: CONTRACT_ADDRESS || "",
 });
 
@@ -359,6 +371,7 @@ function NFTPreview() {
 
   return (
     <div className="flex justify-center mb-8">
+        {/* NFT Preview */}   
       <div className="relative rounded-xl overflow-hidden shadow-lg border border-accent max-w-sm">
         {isVideo ? (
           <video
@@ -766,11 +779,11 @@ function MintingInterface({ shouldAutoConnect }) {
           </div>
         )}
       </div>
-            {/* Drawing Date Info - Only show if raffle is enabled */}
-      {themeConfig.features.raffleEnabled && drawingDate && (
+            {/* Drawing Date Info - Only show if raffle is enabled and not in post-drawing mode */}
+      {themeConfig.features.raffleEnabled && drawingDate && !themeConfig.features.allowPostDrawingMint && (
         <div className="border border-accent rounded-lg p-6 mb-8 bg-surface">
           <h3 className="text-xl font-bold text-primary mb-2 flex items-center">
-            ⏰ {t('drawing.title', { prizeAmount: themeConfig.prizeAmount, drawingName: 'Second PolyPrize Drawing' })}
+            ⏰ {t('drawing.title', { prizeAmount: themeConfig.prizeAmount, drawingName: themeConfig.appName })}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
