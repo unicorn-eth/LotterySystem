@@ -45,13 +45,10 @@ module.exports = {
     },
   },
   etherscan: {
-    apiKey: {
-      // Etherscan V2 API - single key works across all networks
-      polygon: process.env.ETHERSCAN_API_KEY || "",
-      base: process.env.ETHERSCAN_API_KEY || "",
-      arbitrumOne: process.env.ETHERSCAN_API_KEY || "",
-      optimisticEthereum: process.env.ETHERSCAN_API_KEY || "",
-      sepolia: process.env.ETHERSCAN_API_KEY || "",
-    },
+    // Etherscan V2 API - single key works across all networks
+    apiKey: process.env.ETHERSCAN_API_KEY || "",
+  },
+  sourcify: {
+    enabled: false,
   },
 };
