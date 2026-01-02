@@ -64,46 +64,8 @@ async function main() {
   const contractAddress = await contract.getAddress();
 
   console.log("\n✅ PolyPrizeUnicorn deployed to:", contractAddress);
-
-  // Auto-verify on block explorer
-  if (process.env.ETHERSCAN_API_KEY) {
-    console.log("\n⏳ Waiting for block confirmations before verification...");
-
-    // Wait for a few block confirmations
-    const deployTx = contract.deploymentTransaction();
-    if (deployTx) {
-      await deployTx.wait(5); // Wait for 5 confirmations
-    }
-
-    console.log("🔍 Verifying contract on block explorer...");
-
-    try {
-      await hre.run("verify:verify", {
-        address: contractAddress,
-        constructorArguments: [
-          collectionName,
-          symbol,
-          collectionDescription,
-          baseImageURI,
-          baseAnimationURI,
-          drawingDate,
-          isSoulbound,
-          accountFactory,
-          mintPrice
-        ],
-      });
-      console.log("✅ Contract verified successfully!");
-    } catch (error) {
-      if (error.message.includes("Already Verified")) {
-        console.log("✅ Contract is already verified!");
-      } else {
-        console.error("❌ Verification failed:", error.message);
-        console.log("\nTo verify manually, use hardhat verify command with constructor args.");
-      }
-    }
-  } else {
-    console.log("\n⚠️  ETHERSCAN_API_KEY not set - skipping verification");
-  }
+  console.log("\nTo verify on block explorer, wait for a few confirmations then run:");
+  console.log(`npx hardhat verify --network ${hre.network.name} ${contractAddress} "${collectionName}" "${symbol}" "${collectionDescription}" "${baseImageURI}" "${baseAnimationURI}" ${drawingDate} ${isSoulbound} ${accountFactory} ${mintPrice}`);
 }
 
 main().catch((error) => {

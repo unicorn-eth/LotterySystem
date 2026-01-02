@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/Base64.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 // Interface for Thirdweb AccountFactory to check if address is a registered smart account
 interface IAccountFactory {
@@ -275,6 +276,12 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
     function withdrawETH() external onlyOwner {
         (bool success, ) = payable(owner()).call{value: address(this).balance}("");
         require(success, "ETH withdrawal failed");
+    }
+
+    function withdrawERC20(address token) external onlyOwner {
+        uint256 balance = IERC20(token).balanceOf(address(this));
+        require(balance > 0, "No tokens to withdraw");
+        require(IERC20(token).transfer(owner(), balance), "ERC20 transfer failed");
     }
 
     // Update collection description

@@ -23,7 +23,7 @@ This decentralized application (dapp) allows authorized users to claim NFTs on t
 
 - **Frontend**: React 19 with Vite
 - **Web3**: Thirdweb v5 SDK
-- **Blockchain**: Polygon mainnet (configurable)
+- **Blockchain**: Multi-chain (Polygon, Arbitrum, Base, Optimism, Sepolia)
 - **Styling**: Tailwind CSS with CSS custom properties
 - **Internationalization**: i18next with browser language detection
 - **Analytics**: Google Analytics 4 (optional)
@@ -72,6 +72,7 @@ Then connect your repository to Vercel and set environment variables in the dash
 | `VITE_THIRDWEB_CLIENT_ID` | Your Thirdweb client ID ([get one here](https://thirdweb.com/dashboard)) |
 | `VITE_CONTRACT_ADDRESS` | Your deployed NFT contract address |
 | `VITE_THIRDWEB_FACTORY_ADDRESS` | Smart wallet factory address |
+| `VITE_APP_NETWORK_NAME` | Network name: `polygon`, `arbitrum`, `base`, `optimism`, or `sepolia` |
 
 ### Branding (Optional)
 
@@ -107,6 +108,7 @@ If `VITE_NFT_IMAGE_URL` is not set, the app automatically fetches the image from
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `VITE_RAFFLE_ENABLED` | `true` | Show/hide raffle countdown section |
+| `VITE_ALLOW_POST_DRAWING_MINT` | `false` | Allow minting after drawing date (hides raffle section) |
 | `VITE_GA_MEASUREMENT_ID` | (none) | Google Analytics 4 Measurement ID |
 
 ## Customization
@@ -177,11 +179,12 @@ In `src/config/theme.config.js`:
 
 ```javascript
 features: {
-  darkModeEnabled: true,        // Enable dark/light mode toggle
-  socialShareEnabled: true,     // Show social sharing buttons
-  analyticsEnabled: true,       // Enable Google Analytics
+  darkModeEnabled: true,         // Enable dark/light mode toggle
+  socialShareEnabled: true,      // Show social sharing buttons
+  analyticsEnabled: true,        // Enable Google Analytics
   languageSelectorEnabled: true, // Show language dropdown
-  raffleEnabled: true,          // Show raffle countdown (also via env var)
+  raffleEnabled: true,           // Show raffle countdown (also via env var)
+  allowPostDrawingMint: false,   // Allow minting after drawing date
 }
 ```
 

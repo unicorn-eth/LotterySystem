@@ -621,7 +621,7 @@ function MintingInterface({ shouldAutoConnect }) {
           setTimeout(() => setMintStatus(""), 3000);
         },
         onError: (error) => {
-        console.error("Claiming failed:", error.code); // Log code only
+        console.error("Claiming failed:", error); // Log full error
         setMintStatus(t('claim.transactionFailed')); // Generic message
         if (themeConfig.features.analyticsEnabled) {
           trackNFTClaim(address, false, error.code || 'transaction_failed');
