@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.20;
 
 // Use OpenZeppelin for core security features, manual pause implementation
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
@@ -16,6 +16,9 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
     // Manual Pausable Implementation (avoiding problematic import)
     bool private _paused = false;
 
+    // Allow minting after drawing date (for continued engagement/campaign segmentation)
+    bool public allowMintingAfterDrawing = false;
+
     uint256 public drawingDate;
     uint256 private _nextTokenId = 1;
     string private baseImageURI;      // Static image (PNG/JPG)
@@ -28,6 +31,7 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
     event BaseImageURIUpdated(string oldURI, string newURI);
     event BaseAnimationURIUpdated(string oldURI, string newURI);
     event Minted(address indexed to, uint256 indexed tokenId);
+    event AllowMintingAfterDrawingUpdated(bool oldValue, bool newValue);
     
     // Manual Pausable Events
     event Paused(address account);
@@ -82,7 +86,10 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
 
     // Main contract modifiers and functions
     modifier beforeDrawing() {
-        require(block.timestamp < drawingDate, "Minting period is over");
+        require(
+            block.timestamp < drawingDate || allowMintingAfterDrawing,
+            "Minting period is over"
+        );
         require(totalSupply() < MAX_SUPPLY, "Max supply reached");
         _;
     }
@@ -161,7 +168,14 @@ contract PolyPrizeUnicorn is ERC721, ERC721Enumerable, Ownable {
 
     // Utility functions
     function isMintingActive() external view returns (bool) {
-        return block.timestamp < drawingDate && !_paused;
+        return (block.timestamp < drawingDate || allowMintingAfterDrawing) && !_paused;
+    }
+
+    // Toggle allow minting after drawing date
+    function setAllowMintingAfterDrawing(bool _allow) external onlyOwner {
+        bool oldValue = allowMintingAfterDrawing;
+        allowMintingAfterDrawing = _allow;
+        emit AllowMintingAfterDrawingUpdated(oldValue, _allow);
     }
     function timeUntilDrawing() external view returns (uint256) {
         return block.timestamp < drawingDate ? drawingDate - block.timestamp : 0;

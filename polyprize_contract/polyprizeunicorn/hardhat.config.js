@@ -1,18 +1,56 @@
 require("@nomicfoundation/hardhat-ethers");
+require("@nomicfoundation/hardhat-verify");
 require("dotenv").config();
 
+const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
+
 module.exports = {
-  solidity: "0.8.17",
-  networks: {
-    amoy: {
-      url: "https://rpc-amoy.polygon.technology/",
-      chainId: 80002,
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+  solidity: {
+    version: "0.8.20",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+      viaIR: true,
     },
+  },
+  networks: {
+    // Mainnets
     polygon: {
-      url: "https://polygon-rpc.com/",
+      url: process.env.POLYGON_RPC_URL || "https://polygon-rpc.com/",
       chainId: 137,
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-    }
-  }
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+    },
+    base: {
+      url: process.env.BASE_RPC_URL || "https://mainnet.base.org",
+      chainId: 8453,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+    },
+    arbitrum: {
+      url: process.env.ARBITRUM_RPC_URL || "https://arb1.arbitrum.io/rpc",
+      chainId: 42161,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+    },
+    optimism: {
+      url: process.env.OPTIMISM_RPC_URL || "https://mainnet.optimism.io",
+      chainId: 10,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+    },
+    // Testnet
+    sepolia: {
+      url: process.env.SEPOLIA_RPC_URL || "https://rpc.sepolia.org",
+      chainId: 11155111,
+      accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
+    },
+  },
+  etherscan: {
+    apiKey: {
+      polygon: process.env.POLYGONSCAN_API_KEY || "",
+      base: process.env.BASESCAN_API_KEY || "",
+      arbitrumOne: process.env.ARBISCAN_API_KEY || "",
+      optimisticEthereum: process.env.OPTIMISM_API_KEY || "",
+      sepolia: process.env.ETHERSCAN_API_KEY || "",
+    },
+  },
 };

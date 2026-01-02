@@ -1,16 +1,26 @@
 {
-  "name": "hardhat-javascript-starter",
+  "name": "polyprize-unicorn",
   "scripts": {
+    "compile": "npx hardhat compile",
+    "deploy:polygon": "npx hardhat run scripts/deploy.js --network polygon",
+    "deploy:base": "npx hardhat run scripts/deploy.js --network base",
+    "deploy:arbitrum": "npx hardhat run scripts/deploy.js --network arbitrum",
+    "deploy:optimism": "npx hardhat run scripts/deploy.js --network optimism",
+    "deploy:sepolia": "npx hardhat run scripts/deploy.js --network sepolia",
+    "verify": "npx hardhat verify",
     "build": "npx thirdweb@latest detect",
     "deploy": "npx thirdweb@latest deploy",
     "publish": "npx thirdweb@latest publish"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.0",
     "hardhat": "^2.19.1"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.4.0",
-    "@thirdweb-dev/contracts": "^3.15.0",
-    "zksync-ethers": "^6.21.0"
+    "@thirdweb-dev/contracts": "^3.15.0"
   }
 }
