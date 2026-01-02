@@ -46,10 +46,11 @@ module.exports = {
   },
   etherscan: {
     apiKey: {
-      polygon: process.env.POLYGONSCAN_API_KEY || "",
-      base: process.env.BASESCAN_API_KEY || "",
-      arbitrumOne: process.env.ARBISCAN_API_KEY || "",
-      optimisticEthereum: process.env.OPTIMISM_API_KEY || "",
+      // Etherscan V2 API - single key works across all networks
+      polygon: process.env.ETHERSCAN_API_KEY || "",
+      base: process.env.ETHERSCAN_API_KEY || "",
+      arbitrumOne: process.env.ETHERSCAN_API_KEY || "",
+      optimisticEthereum: process.env.ETHERSCAN_API_KEY || "",
       sepolia: process.env.ETHERSCAN_API_KEY || "",
     },
   },
