@@ -1,9 +1,10 @@
 // scripts/deploy.js
 require("dotenv").config();
+const hre = require("hardhat");
 
 async function main() {
-  const [deployer] = await ethers.getSigners();
-  const network = await ethers.provider.getNetwork();
+  const [deployer] = await hre.ethers.getSigners();
+  const network = await hre.ethers.provider.getNetwork();
 
   console.log("Deploying PolyPrizeUnicorn...");
   console.log("Network:", network.name, "(Chain ID:", network.chainId.toString(), ")");
@@ -28,7 +29,8 @@ async function main() {
   console.log("  baseAnimationURI:", baseAnimationURI);
   console.log("  drawingDate:", drawingDate, "(", new Date(parseInt(drawingDate) * 1000).toISOString(), ")");
 
-  const PolyPrizeUnicorn = await ethers.getContractFactory("PolyPrizeUnicorn");
+  // Deploy contract
+  const PolyPrizeUnicorn = await hre.ethers.getContractFactory("PolyPrizeUnicorn");
   const contract = await PolyPrizeUnicorn.deploy(
     baseImageURI,
     baseAnimationURI,
@@ -39,8 +41,39 @@ async function main() {
   const contractAddress = await contract.getAddress();
 
   console.log("\n✅ PolyPrizeUnicorn deployed to:", contractAddress);
-  console.log("\nTo verify on block explorer:");
-  console.log(`npx hardhat verify --network ${network.name} ${contractAddress} "${baseImageURI}" "${baseAnimationURI}" ${drawingDate}`);
+
+  // Auto-verify on block explorer
+  if (process.env.ETHERSCAN_API_KEY) {
+    console.log("\n⏳ Waiting for block confirmations before verification...");
+
+    // Wait for a few block confirmations
+    const deployTx = contract.deploymentTransaction();
+    if (deployTx) {
+      await deployTx.wait(5); // Wait for 5 confirmations
+    }
+
+    console.log("🔍 Verifying contract on block explorer...");
+
+    try {
+      await hre.run("verify:verify", {
+        address: contractAddress,
+        constructorArguments: [baseImageURI, baseAnimationURI, drawingDate],
+      });
+      console.log("✅ Contract verified successfully!");
+    } catch (error) {
+      if (error.message.includes("Already Verified")) {
+        console.log("✅ Contract is already verified!");
+      } else {
+        console.error("❌ Verification failed:", error.message);
+        console.log("\nTo verify manually:");
+        console.log(`npx hardhat verify --network ${hre.network.name} ${contractAddress} "${baseImageURI}" "${baseAnimationURI}" ${drawingDate}`);
+      }
+    }
+  } else {
+    console.log("\n⚠️  ETHERSCAN_API_KEY not set - skipping verification");
+    console.log("To verify manually:");
+    console.log(`npx hardhat verify --network ${hre.network.name} ${contractAddress} "${baseImageURI}" "${baseAnimationURI}" ${drawingDate}`);
+  }
 }
 
 main().catch((error) => {
