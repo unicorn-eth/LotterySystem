@@ -49,7 +49,7 @@ function walletActivityDevProxy() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               jsonrpc: '2.0', id: 1, method: 'alchemy_getAssetTransfers',
-              params: [{ ...(fromAddress ? { fromAddress } : {}), ...(toAddress ? { toAddress } : {}), category, maxCount: '0x1', withMetadata: false }],
+              params: [{ ...(fromAddress ? { fromAddress } : {}), ...(toAddress ? { toAddress } : {}), category, withMetadata: false }],
             }),
           }).then(r => r.json());
 

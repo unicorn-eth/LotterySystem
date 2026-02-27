@@ -40,7 +40,6 @@ export default async function handler(req, res) {
           ...(fromAddress ? { fromAddress } : {}),
           ...(toAddress ? { toAddress } : {}),
           category,
-          maxCount: '0x1',
           withMetadata: false,
         }],
       }),
