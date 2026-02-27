@@ -76,6 +76,8 @@ The updated contract uses a **single image for all NFTs**, making deployment muc
 - Reduces hosting costs and complexity
 - Ensures permanent availability
 
+- 
+
 ### Option A: IPFS (Recommended for Permanence)
 ```bash
 # Upload your unicorn image to IPFS
