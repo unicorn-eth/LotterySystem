@@ -397,7 +397,7 @@ export default function MintingInterface({ shouldAutoConnect }) {
       )}
 
       {/* Drawing Date Info */}
-      {drawingDate && (
+      {(themeConfig.raffleEnabled ?? true) && drawingDate && (
         <div className="border border-accent rounded-lg p-6 mb-8 bg-surface">
           <h3 className="text-xl font-bold text-primary mb-2 flex items-center">
             ⏰ {t('drawing.title', { prizeAmount: themeConfig.prizeAmount, drawingName: 'Giveaway Drawing' })}

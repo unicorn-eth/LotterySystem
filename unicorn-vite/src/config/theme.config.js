@@ -83,6 +83,9 @@ export const themeConfig = {
   walletActivityEnabled: import.meta.env.VITE_WALLET_ACTIVITY_ENABLED !== 'false',
   transactionThreshold: parseInt(import.meta.env.VITE_TRANSACTION_THRESHOLD, 10) || 0,
 
+  // Raffle details section
+  raffleEnabled: import.meta.env.VITE_RAFFLE_ENABLED !== 'false',
+
   // Feature flags
   features: {
     darkModeEnabled: true,
