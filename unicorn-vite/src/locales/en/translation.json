@@ -1,7 +1,7 @@
 {
   "header": {
     "title": "Claim your {{appName}}",
-    "description": "Click \"Claim\" below to receive your {{appName}} .<br/><br/>To  be eligible you need to complete the following: <br/><br/>1) Joined the $250 Lottery.<br/><br/>2) Won tokens in the Arbitrum Arcade.<br/><br/>3)Claimed your Unicorn Collectible.",
+    "description": "Click \"Claim\" below to receive your {{appName}} .<br/><br/>To  be eligible you need to complete the following: <br/><br/>1) Joined the $250 Lottery.<br/><br/>2) Won tokens in the Arbitrum Arcade.<br/><br/>3) Claimed your Unicorn Collectible.",
     "accessNote": "Existing {{platformName}} users only",
     "claimFree": "Claim"
   },
