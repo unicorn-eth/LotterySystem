@@ -1,9 +1,9 @@
 {
   "header": {
     "title": "Reclama tu {{appName}}",
-    "description": "Haz clic en \"Reclamar\" abajo para recibir tu NFT {{appName}}.<br/><br/>Para participar en el sorteo, reclama este NFT y regístrate con el mismo correo electrónico que usaste para ETHDenver en <a href='https://app.arbitrum.ac?utm_source=raffle' target='_blank'>Arbitrum Accounts</a>.<br/><br/>Participarás por el gran premio de {{prizeAmount}} y sorteos diarios.<br/><br/>Los sorteos diarios se realizan en el stand de Unicorn.eth a las 12:55 PM MT. Debes estar presente para ganar.<br/><br/>El ganador del gran premio será notificado por correo electrónico.",
+    "description": "Haz clic en \"Reclamar\" abajo para recibir tu {{appName}}.<br/><br/>Para ser elegible necesitas completar lo siguiente:<br/><br/>1) Unirte a la Lotería de $250.<br/><br/>2) Ganar tokens en Arbitrum Arcade.<br/><br/>3) Reclamar tu Coleccionable Unicorn.",
     "accessNote": "Solo para usuarios existentes de {{platformName}}",
-    "claimFree": "Reclamar gratis"
+    "claimFree": "Reclamar"
   },
   "connection": {
     "lookingForWallet": "Buscando billetera existente...",

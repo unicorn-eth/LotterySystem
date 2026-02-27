@@ -1,9 +1,9 @@
 {
   "header": {
     "title": "领取您的 {{appName}}",
-    "description": "点击下方的\"领取\"按钮，获取您的 {{appName}} NFT。<br/><br/>要参加抽奖，请领取此NFT并使用您在ETHDenver注册时相同的电子邮件在<a href='https://app.arbitrum.ac?utm_source=raffle' target='_blank'>Arbitrum Accounts</a>注册。<br/><br/>您将有机会赢得 {{prizeAmount}} 大奖和每日赠品。<br/><br/>每日赠品在Unicorn.eth展位于中午12:55 PM MT举行。您必须在场才能获奖。<br/><br/>大奖得主将通过电子邮件通知。",
+    "description": "点击下方的\"领取\"按钮，获取您的 {{appName}}。<br/><br/>要符合资格，您需要完成以下步骤：<br/><br/>1) 加入 $250 抽奖。<br/><br/>2) 在 Arbitrum Arcade 中赢得代币。<br/><br/>3) 领取您的 Unicorn 收藏品。",
     "accessNote": "仅限 {{platformName}} 现有用户",
-    "claimFree": "免费领取"
+    "claimFree": "领取"
   },
   "connection": {
     "lookingForWallet": "正在查找现有钱包...",

@@ -1,9 +1,9 @@
 {
   "header": {
     "title": "{{appName}}を請求する",
-    "description": "下の「請求」をクリックして、{{appName}} NFTを受け取りましょう。<br/><br/>抽選に参加するには、このNFTを請求し、ETHDenverで使用したのと同じメールアドレスで<a href='https://app.arbitrum.ac?utm_source=raffle' target='_blank'>Arbitrum Accounts</a>に登録してください。<br/><br/>{{prizeAmount}}のグランプリと毎日のプレゼントに参加できます。<br/><br/>毎日のプレゼントはUnicorn.ethブースで午後12:55（MT）に行われます。当選するにはその場にいる必要があります。<br/><br/>グランプリの当選者にはメールで通知されます。",
+    "description": "下の「請求」をクリックして、{{appName}}を受け取りましょう。<br/><br/>資格を得るには、以下を完了する必要があります：<br/><br/>1) $250 抽選に参加する。<br/><br/>2) Arbitrum Arcade でトークンを獲得する。<br/><br/>3) Unicorn コレクティブルを請求する。",
     "accessNote": "{{platformName}}の既存ユーザー限定",
-    "claimFree": "無料で請求"
+    "claimFree": "請求"
   },
   "connection": {
     "lookingForWallet": "既存のウォレットを検索中...",

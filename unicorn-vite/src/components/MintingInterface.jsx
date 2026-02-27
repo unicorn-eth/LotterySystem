@@ -297,16 +297,6 @@ export default function MintingInterface({ shouldAutoConnect }) {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Wallet Activity Widget — always visible when connected */}
-      {widgetEnabled && address && (
-        <WalletActivityWidget
-          activity={activity}
-          loading={activityLoading}
-          address={address}
-          ensName={ensName}
-        />
-      )}
-
       {/* Claiming Section */}
       <div className="bg-surface-muted rounded-lg p-8 mb-8 border border-default">
         {checkingMinted ? (
@@ -395,6 +385,16 @@ export default function MintingInterface({ shouldAutoConnect }) {
           </div>
         )}
       </div>
+
+      {/* Wallet Activity Widget — below claiming section */}
+      {widgetEnabled && address && (
+        <WalletActivityWidget
+          activity={activity}
+          loading={activityLoading}
+          address={address}
+          ensName={ensName}
+        />
+      )}
 
       {/* Drawing Date Info */}
       {drawingDate && (
